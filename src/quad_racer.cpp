@@ -45,7 +45,7 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("/quad_racer/output/rateThrust", 1000);
+  ros::Publisher pub_vel = n.advertise<mav_msgs::RateThrust>("output/rateThrust", 1000);
 
   ros::Rate loop_rate(10);  
 
@@ -59,13 +59,13 @@ int main(int argc, char **argv)
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
-    std_msgs::String msg;
+    // std_msgs::String msg;
 
-    std::stringstream ss;
-    ss << "hello world " << count;
-    msg.data = ss.str();
+    // std::stringstream ss;
+    // ss << "hello world " << count;
+    // msg.data = ss.str();
 
-    ROS_INFO("%s", msg.data.c_str());
+    // ROS_INFO("%s", msg.data.c_str());
 
     /**
      * The publish() function is how you send messages. The parameter
@@ -73,7 +73,31 @@ int main(int argc, char **argv)
      * given as a template parameter to the advertise<>() call, as was done
      * in the constructor above.
      */
-    chatter_pub.publish(msg);
+    mav_msgs::RateThrust thr_msg;
+    thr_msg.header.frame_id = "uav/imu";
+    thr_msg.header.stamp = ros::Time::now();
+
+
+
+    float pitch = 0.5;
+    float roll = 0.5;
+    float yaw = 0.5;
+    float vertical = 0.5;
+
+    /* check deadzones */
+//    if (std::abs(pitch) < joy_deadzones["pitch"]) pitch = 0;
+//    if (std::abs(yaw) < joy_deadzones["yaw"]) yaw = 0;
+//    if (std::abs(roll) < joy_deadzones["roll"]) roll = 0;
+//    if (std::abs(vertical) < joy_deadzones["vertical"]) vertical = 0;
+
+    thr_msg.angular_rates.y = pitch;
+    thr_msg.angular_rates.x = roll;
+    thr_msg.angular_rates.z = yaw;
+    thr_msg.thrust.z = vertical;
+
+    // Publish message.
+    // Might be an empty message if there is no override enabled.
+    pub_vel.publish(thr_msg);
 
     ros::spinOnce();
 
@@ -84,3 +108,8 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
+// void control(void)
+// {
+
+// }
