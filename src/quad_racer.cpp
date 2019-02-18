@@ -79,10 +79,10 @@ int main(int argc, char **argv)
 
 
 
-    float pitch = 0.5;
-    float roll = 0.5;
-    float yaw = 0.5;
-    float vertical = 0.5;
+    float pitch = 0.0;
+    float roll = 0.0;
+    float yaw = 0.3;
+    float vertical = 9.9;
 
     /* check deadzones */
 //    if (std::abs(pitch) < joy_deadzones["pitch"]) pitch = 0;
