@@ -2,7 +2,27 @@
 #include "std_msgs/String.h"
 #include <mav_msgs/RateThrust.h>
 
-#include <sstream>
+#include <image_transport/image_transport.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <cv_bridge/cv_bridge.h>
+
+
+/*
+  This is the callback function for the camera topic "/bounding_box_camera/RGB"
+*/
+// void imageCallback(const sensor_msgs::ImageConstPtr& msg)
+// {
+//   try
+//   {
+//     cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
+//     ROS_INFO("SHOWING_IMAGE\n");
+//     cv::waitKey(30);
+//   }
+//   catch (cv_bridge::Exception& e)
+//   {
+//     ROS_ERROR("Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
+//   }
+// }
 
 /**
  * This tutorial demonstrates simple sending of messages over the ROS system.
@@ -81,7 +101,7 @@ int main(int argc, char **argv)
 
     float pitch = 0.0;
     float roll = 0.0;
-    float yaw = 0.3;
+    float yaw = 0.25;
     float vertical = 9.9;
 
     /* check deadzones */
@@ -99,10 +119,19 @@ int main(int argc, char **argv)
     // Might be an empty message if there is no override enabled.
     pub_vel.publish(thr_msg);
 
+    // cv::namedWindow("view");
+    // image_transport::ImageTransport it(n);
+    // image_transport::Subscriber sub = it.subscribe("/bounding_box_camera/RGB", 1, imageCallback);
+    // cv::destroyWindow("view");
+    
+
     ros::spinOnce();
 
     loop_rate.sleep();
     ++count;
+
+
+
   }
 
 
