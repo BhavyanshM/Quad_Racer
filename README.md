@@ -25,6 +25,19 @@ source devel/setup.bash
 roslaunch quad_racer quad_racer_flightgoggles.launch ignore_collisions:=1 use_external_renderer:=1
 ```
 
+### Steps to launch quad_racer after a Ubuntu reboot
+
+```
+rosrun flightgoggles FlightGoggles.x86_64 
+cd catkin_ws/
+cd src/quad_racer/
+git pull
+cd ../..
+catkin build
+source devel/setup.bash
+roslaunch quad_racer quad_racer_flightgoggles.launch ignore_collisions:=1 use_external_renderer:=1
+```
+
 ### Author
 Bhavyansh Mishra
 
