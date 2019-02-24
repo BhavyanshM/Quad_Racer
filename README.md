@@ -22,7 +22,7 @@ git clone https://github.com/alphapilotaichallenge/quad_racer.git
 cd ..
 catkin build
 source devel/setup.bash
-roslaunch quad_racer quad_racer_flightgoggles.launch ignore_collisions:=1
+roslaunch quad_racer quad_racer_flightgoggles.launch ignore_collisions:=1 use_external_renderer:=1
 ```
 
 ### Author
