@@ -85,7 +85,6 @@ int main(int argc, char **argv)
     // ss << "hello world " << count;
     // msg.data = ss.str();
 
-    // ROS_INFO("%s", msg.data.c_str());
 
     /**
      * The publish() function is how you send messages. The parameter
@@ -99,7 +98,7 @@ int main(int argc, char **argv)
 
 
 
-    float pitch = 0.0;
+    float pitch = 0.3;
     float roll = 0.0;
     float yaw = 0.25;
     float vertical = 10;
@@ -114,6 +113,7 @@ int main(int argc, char **argv)
     thr_msg.angular_rates.x = roll;
     thr_msg.angular_rates.z = yaw;
     thr_msg.thrust.z = vertical;
+    ROS_INFO("ROLL:%lf\n", thr_msg.angular_rates.y);
 
     // Publish message.
     // Might be an empty message if there is no override enabled.
