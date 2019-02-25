@@ -38,6 +38,13 @@ source devel/setup.bash
 roslaunch quad_racer quad_racer_flightgoggles.launch ignore_collisions:=1 use_external_renderer:=1
 ```
 
+### To upload the latest changes
+
+git add -A
+git commit -m "<your-comment-on-the-commit>"
+git push origin master
+
+
 ### Author
 Bhavyansh Mishra
 
