@@ -45,6 +45,17 @@ git commit -m "<your-comment-on-the-commit>"
 git push origin master
 
 
+### To download latest changes to flightgoggles and recompile
+
+cd catkin_ws/
+cd src/flightgoggles
+git pull origin master
+cd ../
+wstool update
+cd ../
+catkin clean 
+catkin build
+
 ### Author
 Bhavyansh Mishra
 
