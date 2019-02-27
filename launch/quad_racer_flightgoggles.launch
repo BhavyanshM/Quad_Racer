@@ -5,10 +5,10 @@
 
   <group ns="/control_nodes">
     <!-- Start human teleoperation nodes -->
-    <node name="quad_racer" pkg="quad_racer" type="quad_racer">
+    <node name="quad_racer" pkg="quad_racer" type="quad_racer" output="screen">
       <remap from="output/rateThrust" to="/uav/input/rateThrust"/>
     </node>
-    <node name="image_listener" pkg="quad_racer" type="image_listener"/>
+    <node name="image_listener" pkg="quad_racer" type="image_listener" output="screen"/>
   </group>
 
   <!--include core flightgoggles launch file-->

@@ -2,6 +2,8 @@
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
+#include <flightgoggles/IRMarker.h>
+#include <flightgoggles/IRMarkerArray.h>
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
@@ -24,7 +26,6 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
     imshow("mask", mask); // show where orange pixels are located, then use this mask for further processing pass it for example to findNonZero() function in order to obtain the location of the pixels, etc...
 
 
-
     // cv::imshow("view", cv_ptr->image);
     cv::waitKey(1);
   }
@@ -34,14 +35,24 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
   }
 }
 
+void IRMarkerArrayCallback(const flightgoggles::IRMarkerArrayConstPtr& marker_array)
+{
+  for (flightgoggles::IRMarker marker : marker_array->markers){
+    ROS_INFO("Landmark:%s, Marker:%s\n", marker.landmarkID.data.c_str(), marker.markerID.data.c_str());
+    // cv::circle(imagePtr->image, cv::Point(marker.x, marker.y), 5, color, -1);
+  }
+}
+
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "image_listener");
   ros::NodeHandle nh;
-  cv::namedWindow("view");
-  // cv::startWindowThread();
-  image_transport::ImageTransport it(nh);
-  image_transport::Subscriber sub = it.subscribe("/bounding_box_camera/RGB", 1, imageCallback);
+  // cv::namedWindow("view");
+  // image_transport::ImageTransport it(nh);
+  // image_transport::Subscriber sub = it.subscribe("/bounding_box_camera/RGB", 1, imageCallback);
+
+  ros::Subscriber ir_sub = nh.subscribe("/uav/camera/left/ir_beacons", 1, IRMarkerArrayCallback);
+
   ros::spin();
-  cv::destroyWindow("view");
+  // cv::destroyWindow("view");
 }

@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   image_transport
   cv_bridge
+  flightgoggles
 )
 
 find_package(OpenCV REQUIRED)

@@ -113,7 +113,6 @@ int main(int argc, char **argv)
     thr_msg.angular_rates.x = roll;
     thr_msg.angular_rates.z = yaw;
     thr_msg.thrust.z = vertical;
-    ROS_INFO("ROLL:%lf\n", thr_msg.angular_rates.y);
 
     // Publish message.
     // Might be an empty message if there is no override enabled.
