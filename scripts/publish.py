@@ -3,6 +3,7 @@ import rospy
 from std_msgs.msg import String
 from mav_msgs.msg import RateThrust
 from flightgoggles.msg import IRMarker, IRMarkerArray
+from subscribe import IRMarkerArrayCallback
 
 def pubRateThrust():
     pub = rospy.Publisher('output/rateThrust', RateThrust, queue_size=10)
@@ -25,12 +26,13 @@ def pubRateThrust():
         thr_msg.angular_rates.z = yaw;
         thr_msg.thrust.z = vertical;
 
-        rospy.loginfo(marker)
+        # rospy.loginfo(thr_msg)
         pub.publish(thr_msg)
         rate.sleep()
 
 if __name__ == '__main__':
     try:
+        rospy.Subscriber("/uav/camera/left/ir_beacons", IRMarkerArray, IRMarkerArrayCallback)
         pubRateThrust()
     except rospy.ROSInterruptException:
         pass
