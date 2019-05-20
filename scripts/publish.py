@@ -22,14 +22,36 @@ def IRMarkerArrayCallback(data):
     reprojection = np.zeros((758, 1024, 3), np.uint8)
     for name, corners in gates.items():
         if valid[name][0] == 4 and valid[name][1] == 1:
+            objPts = np.float32([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
+            imgPts = np.float32([[corners[0][0], corners[0][1]],
+                                [corners[1][0], corners[1][1]],
+                                [corners[2][0], corners[2][1]],
+                                [corners[3][0], corners[3][1]]])
+            axisPts = np.float32([[0, 0, 0], [0, 1, 0], [0, 0, 1], [1, 0, 0]])
+            fx, cx, fy, cy = 548.4088134765625, 512.0, 548.4088134765625, 384.0
+            dist_coef = np.zeros(4)
+            K = np.float64([[fx, 0.0, cx],
+                            [0.0, fy, cy],
+                            [0.0, 0.0, 1.0]])
+
+            _ret, rvec, tvec = cv2.solvePnP(objPts, imgPts, K, dist_coef)
+
             cv2.line(reprojection, corners[0], corners[1], (255,128,0), 1)
             cv2.line(reprojection, corners[1], corners[2], (255,128,0), 1)
             cv2.line(reprojection, corners[2], corners[3], (255,128,0), 1)
             cv2.line(reprojection, corners[3], corners[0], (255,128,0), 1)
+            
+            projPts = cv2.projectPoints(axisPts, rvec, tvec, K, dist_coef)[0].reshape(-1, 2)
+
+            cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[1][0],projPts[1][1]), (128,255,255), 1)
+            cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[2][0],projPts[2][1]), (255,128,255), 1)
+            cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[3][0],projPts[3][1]), (255,255,128), 1)
+
+            rospy.loginfo(projPts)
+
     cv2.imshow("Reprojection", reprojection)
     cv2.waitKey(1)
     
-    rospy.loginfo(valid)
 
 
 def pubRateThrust():
@@ -81,7 +103,7 @@ if __name__ == '__main__':
     "Gate20":[(0,0),(0,0),(0,0),(0,0)],
     "Gate21":[(0,0),(0,0),(0,0),(0,0)],
     "Gate22":[(0,0),(0,0),(0,0),(0,0)],
-    "Gate21":[(0,0),(0,0),(0,0),(0,0)]}
+    "Gate23":[(0,0),(0,0),(0,0),(0,0)]}
     try:
         rospy.Subscriber("/uav/camera/left/ir_beacons", IRMarkerArray, IRMarkerArrayCallback)
         pubRateThrust()
