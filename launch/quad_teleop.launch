@@ -15,7 +15,9 @@
       <remap from="output/land" to="/uav/input/land"/>
       <remap from="output/reset" to="/uav/input/reset"/>
     </node>
-    <node name="image_listener" pkg="quad_racer" type="image_listener" output="screen"/>
+    <node name="quad_racer" pkg="quad_racer" type="publish.py" output="screen">
+      <remap from="output/rateThrust" to="/uav/input/rateThrust"/>
+    </node> 
   </group>
 
   <!--include core flightgoggles launch file-->
