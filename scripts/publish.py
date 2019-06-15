@@ -70,13 +70,13 @@ def IRMarkerArrayCallback(data):
             cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[2][0],projPts[2][1]), (255,128,255), 1)
             cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[3][0],projPts[3][1]), (255,255,128), 1)
 
-            print(tvec)
-            rotMatrix = cv2.Rodrigues(rvec)
+            # print(tvec  )
+            rotMatrix = cv2.Rodrigues(rvec)[0]
             H = cv2.hconcat(rotMatrix, tvec)
             Z = np.float64([0,0,0,1])
             V = cv2.vconcat(H, Z)
             # cv::Mat trans = V.inv();
-            # rospy.loginfo(projPts)
+            print(H)
 
     cv2.imshow("Reprojection", reprojection)
     cv2.waitKey(1)
