@@ -30,6 +30,10 @@ def arrangeCorners(corners):
 def getObjectCorners(name):
     ulx, uly, urx, ury, llx, lly, lrx, lry = 0,0,0,0,0,0,0,0    
     nominal_location = rospy.get_param('/uav/'+name+'/nominal_location')
+    init_pose = rospy.get_param('/uav/flightgoggles_uav_dynamics/init_pose')
+    print('INIT:',init_pose[:3])
+    print('GATE:',nominal_location[3])
+    print(name,np.subtract(init_pose[:3],nominal_location[0]))
     b = np.linalg.norm(np.subtract(nominal_location[0],nominal_location[1]))
     a = np.linalg.norm(np.subtract(nominal_location[0],nominal_location[3]))
     return max(a,b), min(a,b)
@@ -70,13 +74,17 @@ def IRMarkerArrayCallback(data):
             cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[2][0],projPts[2][1]), (255,128,255), 1)
             cv2.line(reprojection, (projPts[0][0],projPts[0][1]), (projPts[3][0],projPts[3][1]), (255,255,128), 1)
 
+            cv2.putText(reprojection, name, (ulx-5,uly-5), cv2.FONT_HERSHEY_PLAIN, 1.2, (255,255,255))
+
             # print(tvec  )
             rotMatrix = cv2.Rodrigues(rvec)[0]
-            H = cv2.hconcat(rotMatrix, tvec)
-            Z = np.float64([0,0,0,1])
-            V = cv2.vconcat(H, Z)
-            # cv::Mat trans = V.inv();
-            print(H)
+            H = np.concatenate((rotMatrix, tvec.T), axis=0)
+            Z = np.array([[0,0,0,1]])
+            V = np.concatenate((H, Z.T), axis=1)
+            T = np.linalg.inv(V)
+            # print('V', V)
+            print('T', T[3])
+
 
     cv2.imshow("Reprojection", reprojection)
     cv2.waitKey(1)
